@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visor Bioinformático - Hemoglobina Alfa</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <header>
+        <h1>Análisis de Secuencias: Hemoglobina Alfa Humana</h1>
+    </header>
+    
+    <main class="container">
+        <aside class="ranking-panel">
+            <h2>Ranking Evolutivo</h2>
+            <div id="ranking-list" class="list-group">
+                <p>Cargando análisis...</p>
+            </div>
+        </aside>
+
+        <section class="detail-panel">
+            <div id="placeholder-msg" class="placeholder">
+                <p>👈 Selecciona un organismo del ranking para ver el alineamiento detallado.</p>
+            </div>
+            
+            <div id="alignment-view" class="hidden">
+                <h2 id="detail-title">Detalle</h2>
+                
+                <div class="metrics-cards">
+                    <div class="card">
+                        <h3>Identidad Exacta</h3>
+                        <p id="metric-identity" class="big-number">0%</p>
+                    </div>
+                    <div class="card">
+                        <h3>Similitud (Conservadora)</h3>
+                        <p id="metric-similarity" class="big-number">0%</p>
+                    </div>
+                    <div class="card">
+                        <h3>Longitud Total</h3>
+                        <p id="metric-length" class="big-number">0</p>
+                    </div>
+                </div>
+
+                <div class="alignment-grid">
+                    <div class="seq-row">
+                        <span class="label">Humano:</span>
+                        <div id="seq-human" class="sequence-chars"></div>
+                    </div>
+                    <div class="seq-row">
+                        <span class="label">Símbolos:</span>
+                        <div id="seq-symbols" class="sequence-chars symbols"></div>
+                    </div>
+                    <div class="seq-row">
+                        <span class="label" id="label-target">Objetivo:</span>
+                        <div id="seq-target" class="sequence-chars"></div>
+                    </div>
+                </div>
+
+                <div class="interpretation">
+                    <h3>Interpretación Automática</h3>
+                    <p id="interpretation-text"></p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script src="js/app.js"></script>
+</body>
+</html>
