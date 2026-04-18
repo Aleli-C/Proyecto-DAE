@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catálogo de Organismos - Bio-App DAE</title>
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/listado.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="brand">🧬 Bio-Analizador</div>
+            <ul class="nav-links">
+                <li><a href="/home">Inicio</a></li>
+                <li><a href="/listado" class="active">Listado ABC</a></li>
+                <li><a href="/comparar">Comparar</a></li>
+                <li><button id="logoutBtn" class="btn-logout">Cerrar Sesión</button></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="container fade-in">
+
+        <header class="section-header">
+            <div class="header-top">
+                <div>
+                    <h2>Catálogo de Organismos</h2>
+                    <p>Base de datos de secuencias de Hemoglobina Alfa ordenadas alfabéticamente.</p>
+                </div>
+                <div id="counter-badge" class="counter-badge hidden">
+                    <span id="total-count">0</span> organismos registrados
+                </div>
+            </div>
+
+            <div class="controls-bar">
+                <div class="search-wrapper">
+                    <span class="search-icon">🔍</span>
+                    <input
+                        type="text"
+                        id="search-input"
+                        placeholder="Buscar por nombre común, científico o clado..."
+                        autocomplete="off"
+                    >
+                </div>
+                <div class="filter-group">
+                    <label for="clade-filter">Filtrar por clado:</label>
+                    <select id="clade-filter">
+                        <option value="">Todos</option>
+                    </select>
+                </div>
+            </div>
+        </header>
+
+        <!-- Estado de carga -->
+        <div id="loading-state" class="state-box">
+            <div class="spinner"></div>
+            <p>Cargando organismos...</p>
+        </div>
+
+        <!-- Estado de error -->
+        <div id="error-state" class="state-box hidden">
+            <span class="state-icon">⚠️</span>
+            <p id="error-msg">Error al cargar los datos.</p>
+        </div>
+
+        <!-- Estado vacío (filtro sin resultados) -->
+        <div id="empty-state" class="state-box hidden">
+            <span class="state-icon">🔬</span>
+            <p>Ningún organismo coincide con la búsqueda.</p>
+        </div>
+
+        <!-- Tabla principal -->
+        <div id="table-wrapper" class="hidden">
+            <table id="organisms-table">
+                <thead>
+                    <tr>
+                        <th class="col-num">#</th>
+                        <th class="col-common sortable" data-col="common_name">
+                            Nombre Común <span class="sort-icon">↕</span>
+                        </th>
+                        <th class="col-sci sortable" data-col="scientific_name">
+                            Nombre Científico <span class="sort-icon">↕</span>
+                        </th>
+                        <th class="col-clade sortable" data-col="clade">
+                            Clado <span class="sort-icon">↕</span>
+                        </th>
+                        <th class="col-action">Acción</th>
+                    </tr>
+                </thead>
+                <tbody id="table-body"></tbody>
+            </table>
+
+            <div id="results-summary" class="results-summary"></div>
+        </div>
+
+    </main>
+
+    <script src="/js/listado.js"></script>
+    <script>
+        document.getElementById('logoutBtn').addEventListener('click', () => {
+            window.location.href = '/api/auth/logout';
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,295 @@
+/* src/frontend/public/css/listado.css */
+
+.container {
+    max-width: 1100px;
+    margin: 2rem auto;
+    padding: 0 1.5rem;
+}
+
+/* ── Header ─────────────────────────────────── */
+.section-header {
+    margin-bottom: 1.5rem;
+}
+
+.header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 1.25rem;
+}
+
+.section-header h2 {
+    color: var(--dark-blue);
+    font-size: 1.6rem;
+    margin-bottom: 0.25rem;
+}
+
+.section-header p {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+}
+
+.counter-badge {
+    background: #eff6ff;
+    border: 1px solid #bfdbfe;
+    color: var(--primary-blue);
+    font-weight: 700;
+    font-size: 0.9rem;
+    padding: 0.5rem 1rem;
+    border-radius: 999px;
+    white-space: nowrap;
+    align-self: center;
+}
+
+/* ── Barra de controles ──────────────────────── */
+.controls-bar {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.search-wrapper {
+    position: relative;
+    flex: 1;
+    min-width: 200px;
+}
+
+.search-icon {
+    position: absolute;
+    left: 0.75rem;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 0.9rem;
+    pointer-events: none;
+}
+
+#search-input {
+    width: 100%;
+    padding: 0.7rem 0.75rem 0.7rem 2.25rem;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    font-size: 0.95rem;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    background: white;
+    color: var(--text-main);
+}
+
+#search-input:focus {
+    border-color: var(--primary-blue);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+.filter-group {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    white-space: nowrap;
+}
+
+.filter-group label {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    font-weight: 600;
+}
+
+#clade-filter {
+    padding: 0.7rem 0.75rem;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    font-size: 0.9rem;
+    outline: none;
+    background: white;
+    color: var(--text-main);
+    cursor: pointer;
+    transition: border-color 0.2s;
+}
+
+#clade-filter:focus {
+    border-color: var(--primary-blue);
+}
+
+/* ── Estados (carga / error / vacío) ─────────── */
+.state-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    padding: 4rem 2rem;
+    background: white;
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+    color: var(--text-muted);
+    font-size: 1rem;
+}
+
+.state-icon {
+    font-size: 2.5rem;
+}
+
+.spinner {
+    width: 36px;
+    height: 36px;
+    border: 3px solid #e2e8f0;
+    border-top-color: var(--primary-blue);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* ── Tabla ───────────────────────────────────── */
+#table-wrapper {
+    background: white;
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+    overflow: hidden;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+}
+
+#organisms-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.93rem;
+}
+
+/* Cabecera */
+#organisms-table thead tr {
+    background: #f1f5f9;
+    border-bottom: 2px solid var(--border-color);
+}
+
+#organisms-table th {
+    padding: 0.85rem 1rem;
+    text-align: left;
+    font-weight: 700;
+    color: var(--dark-blue);
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    white-space: nowrap;
+}
+
+th.sortable {
+    cursor: pointer;
+    user-select: none;
+    transition: background 0.15s;
+}
+
+th.sortable:hover {
+    background: #e2e8f0;
+}
+
+th.sorted-asc .sort-icon::after  { content: ' ↑'; }
+th.sorted-desc .sort-icon::after { content: ' ↓'; }
+
+.sort-icon { opacity: 0.45; font-size: 0.8rem; }
+
+/* Columnas */
+.col-num    { width: 48px; text-align: center; }
+.col-common { min-width: 160px; }
+.col-sci    { min-width: 200px; }
+.col-clade  { min-width: 130px; }
+.col-action { width: 130px; text-align: center; }
+
+/* Filas */
+#organisms-table tbody tr {
+    border-bottom: 1px solid #f1f5f9;
+    transition: background 0.15s;
+}
+
+#organisms-table tbody tr:last-child {
+    border-bottom: none;
+}
+
+#organisms-table tbody tr:hover {
+    background: #f8fafc;
+}
+
+#organisms-table td {
+    padding: 0.85rem 1rem;
+    color: var(--text-main);
+    vertical-align: middle;
+}
+
+.td-num {
+    text-align: center;
+    color: var(--text-muted);
+    font-weight: 600;
+    font-size: 0.85rem;
+}
+
+.td-sci {
+    font-style: italic;
+    color: var(--text-muted);
+}
+
+/* Badge de clado */
+.clade-badge {
+    display: inline-block;
+    padding: 0.2rem 0.65rem;
+    border-radius: 999px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.clade-Mammalia      { background: #dbeafe; color: #1e40af; }
+.clade-Aves          { background: #dcfce7; color: #166534; }
+.clade-Reptilia      { background: #fef9c3; color: #854d0e; }
+.clade-Amphibia      { background: #ede9fe; color: #5b21b6; }
+.clade-Actinopterygii{ background: #cffafe; color: #0e7490; }
+.clade-Chondrichthyes{ background: #fce7f3; color: #9d174d; }
+.clade-Insecta       { background: #ffedd5; color: #9a3412; }
+.clade-Nematoda      { background: #f1f5f9; color: #475569; }
+.clade-Annelida      { background: #fdf2f8; color: #86198f; }
+.clade-Mollusca      { background: #ecfdf5; color: #065f46; }
+
+/* Botón de acción */
+.btn-compare {
+    display: inline-block;
+    padding: 0.4rem 0.9rem;
+    background: transparent;
+    color: var(--primary-blue);
+    border: 1px solid var(--primary-blue);
+    border-radius: 6px;
+    font-size: 0.82rem;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s;
+    white-space: nowrap;
+}
+
+.btn-compare:hover {
+    background: var(--primary-blue);
+    color: white;
+}
+
+/* Resumen de resultados */
+.results-summary {
+    padding: 0.75rem 1rem;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    border-top: 1px solid var(--border-color);
+    background: #f8fafc;
+}
+
+/* ── Responsividad ───────────────────────────── */
+@media (max-width: 768px) {
+    .col-sci    { display: none; }
+    .col-action { width: 90px; }
+    .header-top { flex-direction: column; }
+    .controls-bar { flex-direction: column; }
+    .search-wrapper { min-width: unset; width: 100%; }
+}
+
+@media (max-width: 480px) {
+    .col-clade { display: none; }
+}
