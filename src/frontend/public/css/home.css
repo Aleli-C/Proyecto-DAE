@@ -1,0 +1,105 @@
+/* src/frontend/public/css/home.css */
+:root {
+    --primary-blue: #2563eb;
+    --dark-blue: #1e3a8a;
+    --text-gray: #64748b;
+    --bg-light: #f8fafc;
+}
+
+.dashboard-container {
+    max-width: 1200px;
+    margin: 3rem auto;
+    padding: 0 1.5rem;
+}
+
+.welcome-banner {
+    background: white;
+    padding: 2.5rem;
+    border-radius: 16px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    margin-bottom: 2rem;
+}
+
+.welcome-banner h1 {
+    font-size: 2.25rem;
+    color: var(--dark-blue);
+    margin-bottom: 0.5rem;
+}
+
+.welcome-banner p {
+    color: var(--text-gray);
+    font-size: 1.1rem;
+}
+
+/* --- Tarjetas de Acceso Rápido --- */
+.quick-actions {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+
+.action-card {
+    background: white;
+    padding: 2rem;
+    border-radius: 16px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    text-align: center;
+    border: 1px solid #e2e8f0;
+}
+
+.action-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+
+.card-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+.action-card h3 {
+    color: var(--dark-blue);
+    margin-bottom: 1rem;
+}
+
+.action-card p {
+    color: var(--text-gray);
+    margin-bottom: 1.5rem;
+    font-size: 0.95rem;
+    line-height: 1.5;
+}
+
+.btn-action {
+    display: inline-block;
+    padding: 0.75rem 1.5rem;
+    background: var(--primary-blue);
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: 600;
+    transition: background 0.2s;
+}
+
+.btn-action:hover {
+    background: var(--dark-blue);
+}
+
+/* --- Sección Informativa --- */
+.info-section {
+    background: #eff6ff;
+    padding: 2rem;
+    border-radius: 12px;
+    border-left: 4px solid var(--primary-blue);
+}
+
+.info-box h4 {
+    color: var(--dark-blue);
+    margin-bottom: 0.5rem;
+}
+
+.info-box p {
+    color: #1e40af;
+    font-size: 0.9rem;
+    line-height: 1.6;
+}

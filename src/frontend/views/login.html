@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Acceso - Bio-App DAE</title>
+    <link rel="stylesheet" href="/css/login.css">
+</head>
+<body>
+    <div class="login-wrapper">
+        <div class="login-card fade-in">
+            <div class="brand-container">
+                <div class="dna-icon">🧬</div>
+                <h2>Bio-Analizador</h2>
+                <p>Plataforma de Análisis Evolutivo</p>
+            </div>
+            
+            <form id="loginForm">
+                <div class="input-group">
+                    <input type="text" id="user" required autocomplete="off" placeholder=" ">
+                    <label for="user">Usuario</label>
+                </div>
+                
+                <div class="input-group">
+                    <input type="password" id="pass" required placeholder=" ">
+                    <label for="pass">Contraseña</label>
+                </div>
+                
+                <button type="submit" id="loginBtn">
+                    <span class="btn-text">Iniciar Sesión</span>
+                    <span class="loader hidden"></span>
+                </button>
+                <div class="footer-links">
+                    <p>¿No tienes cuenta? <a href="/register">Regístrate aquí</a></p>
+                </div>
+                
+                <p id="msg" class="error-msg"></p>
+            </form>
+        </div>
+    </div>
+    <script src="/js/login.js"></script>
+</body>
+</html>

@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comparador de Secuencias - Bio-App DAE</title>
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/comparar.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="brand">🧬 Bio-Analizador</div>
+            <ul class="nav-links">
+                <li><a href="/home">Inicio</a></li>
+                <li><a href="/listado">Listado ABC</a></li>
+                <li><a href="/comparar" class="active">Comparar</a></li>
+                <li><button id="logoutBtn" class="btn-logout">Cerrar Sesión</button></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="container fade-in">
+        <header class="section-header">
+            <h2>Herramienta de Alineamiento Evolutivo</h2>
+            <p>Selecciona dos organismos para ejecutar el algoritmo Needleman-Wunsch.</p>
+        </header>
+
+        <section class="compare-controls">
+            <div class="select-group">
+                <label for="org1">Secuencia A (Objetivo):</label>
+                <select id="org1"><option value="">Cargando organismos...</option></select>
+            </div>
+            <span class="vs-badge">VS</span>
+            <div class="select-group">
+                <label for="org2">Secuencia B (Consulta):</label>
+                <select id="org2"><option value="">Cargando organismos...</option></select>
+            </div>
+            <button id="btn-analyze" class="btn-primary">Ejecutar Análisis</button>
+        </section>
+
+        <section id="results-panel" class="hidden">
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <h4>Identidad Exacta</h4>
+                    <div id="metric-identity" class="metric-value">0%</div>
+                </div>
+                <div class="metric-card">
+                    <h4>Similitud (Conservadora)</h4>
+                    <div id="metric-similarity" class="metric-value">0%</div>
+                </div>
+                <div class="metric-card">
+                    <h4>Longitud Total</h4>
+                    <div id="metric-length" class="metric-value">0</div>
+                </div>
+            </div>
+
+            <div class="alignment-container">
+                <div class="legend">
+                    <strong>Leyenda Físico-Química:</strong>
+                    <span class="badge aa-nonpolar">No Polar</span>
+                    <span class="badge aa-polar">Polar</span>
+                    <span class="badge aa-acidic">Ácido</span>
+                    <span class="badge aa-basic">Básico</span>
+                    <span class="badge aa-special">Especial</span>
+                    <span class="badge aa-gap">Gap (-)</span>
+                </div>
+                <div class="legend" style="margin-top: 10px;">
+                    <strong>Símbolos:</strong>
+                    <span class="badge sym-match">[*] Coincidencia</span>
+                    <span class="badge sym-conv">[:] Mutación Conservadora</span>
+                </div>
+
+                <div class="alignment-grid">
+                    <div class="seq-row">
+                        <span class="seq-label" id="label-org1">Org 1</span>
+                        <div id="seq1-render" class="seq-chars"></div>
+                    </div>
+                    <div class="seq-row">
+                        <span class="seq-label">Símbolos</span>
+                        <div id="seq-symbols" class="seq-chars symbols"></div>
+                    </div>
+                    <div class="seq-row">
+                        <span class="seq-label" id="label-org2">Org 2</span>
+                        <div id="seq2-render" class="seq-chars"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="interpretation-box">
+                <h4>Interpretación Automática</h4>
+                <p id="interpretation-text"></p>
+            </div>
+        </section>
+    </main>
+
+    <script src="/js/compare.js"></script>
+    <script>
+        document.getElementById('logoutBtn').addEventListener('click', () => { window.location.href = '/api/auth/logout'; });
+    </script>
+</body>
+</html>

@@ -2,104 +2,81 @@ const Database = require('better-sqlite3');
 const path = require('path');
 const fs = require('fs');
 
-// Asegurar que el directorio de datos existe
 const dataDir = path.resolve(__dirname, '../../data');
-if (!fs.existsSync(dataDir)) {
-    fs.mkdirSync(dataDir, { recursive: true });
-}
+if (!fs.existsSync(dataDir)) fs.mkdirSync(dataDir, { recursive: true });
 
-// Inicializar la base de datos
 const db = new Database(path.join(dataDir, 'bio_database.sqlite'));
 
-// Construcción del esquema (Transacción segura)
 db.exec(`
     PRAGMA foreign_keys = ON;
 
+    CREATE TABLE IF NOT EXISTS users (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        username TEXT UNIQUE NOT NULL,
+        password_hash TEXT NOT NULL
+    );
+
     CREATE TABLE IF NOT EXISTS organisms (
         organism_id INTEGER PRIMARY KEY AUTOINCREMENT,
-        scientific_name TEXT NOT NULL UNIQUE,
+        scientific_name TEXT UNIQUE NOT NULL,
         common_name TEXT NOT NULL,
-        clade TEXT NOT NULL,
-        ncbi_tax_id INTEGER UNIQUE
+        clade TEXT NOT NULL
     );
 
     CREATE TABLE IF NOT EXISTS sequences (
         sequence_id INTEGER PRIMARY KEY AUTOINCREMENT,
         organism_id INTEGER NOT NULL,
-        accession_number TEXT NOT NULL UNIQUE,
-        protein_name TEXT NOT NULL,
         sequence_data TEXT NOT NULL,
-        FOREIGN KEY (organism_id) REFERENCES organisms (organism_id) ON DELETE CASCADE
+        FOREIGN KEY(organism_id) REFERENCES organisms(organism_id) ON DELETE CASCADE
     );
 `);
 
-// Preparar sentencias de inserción
-const insertOrganism = db.prepare(`
-    INSERT OR IGNORE INTO organisms (scientific_name, common_name, clade, ncbi_tax_id)
-    VALUES (@scientific_name, @common_name, @clade, @ncbi_tax_id)
-`);
+const insertOrganism = db.prepare(`INSERT OR IGNORE INTO organisms (scientific_name, common_name, clade) VALUES (@scientific_name, @common_name, @clade)`);
+const insertSequence = db.prepare(`INSERT OR IGNORE INTO sequences (organism_id, sequence_data) VALUES ((SELECT organism_id FROM organisms WHERE scientific_name = @scientific_name), @sequence_data)`);
 
-const insertSequence = db.prepare(`
-    INSERT OR IGNORE INTO sequences (organism_id, accession_number, protein_name, sequence_data)
-    VALUES (
-        (SELECT organism_id FROM organisms WHERE scientific_name = @scientific_name),
-        @accession_number, @protein_name, @sequence_data
-    )
-`);
-
-// Datos iniciales de prueba (Hemoglobina alfa - fragmentos simulados de ~50aa)
 const seedData = [
-    {
-        scientific_name: 'Homo sapiens',
-        common_name: 'Humano',
-        clade: 'Mammalia',
-        ncbi_tax_id: 9606,
-        accession_number: 'P69905',
-        protein_name: 'Hemoglobin subunit alpha',
-        // Fragmento representativo
-        sequence_data: 'VLSPADKTNVKAAWGKVGAHAGEYGAEALERMFLSFPTTKTYFPHFDLSHG'
-    },
-    {
-        scientific_name: 'Pan troglodytes',
-        common_name: 'Chimpancé',
-        clade: 'Mammalia',
-        ncbi_tax_id: 9598,
-        accession_number: 'P69907',
-        protein_name: 'Hemoglobin subunit alpha',
-        // 100% de identidad en este bloque, o con 1 mutación mínima
-        sequence_data: 'VLSPADKTNVKAAWGKVGAHAGEYGAEALERMFLSFPTTKTYFPHFDLSHG'
-    },
-    {
-        scientific_name: 'Danio rerio',
-        common_name: 'Pez Cebra',
-        clade: 'Actinopterygii',
-        ncbi_tax_id: 7955,
-        accession_number: 'P69924',
-        protein_name: 'Hemoglobin subunit alpha',
-        // Divergencia evolutiva notable
-        sequence_data: 'SLSDKDKAAVVKWAKDIQAQQGYDVEALELMFKTFPTTKTYFPHFDLSHG'
-    }
+    // --- Primates (Id: >95%) ---
+    { scientific_name: 'Homo sapiens', common_name: 'Humano', clade: 'Mammalia', sequence_data: 'VLSPADKTNVKAAWGKVGAHAGEYGAEALERMFLSFPTTKTYFPHFDLSHG' },
+    { scientific_name: 'Pan troglodytes', common_name: 'Chimpancé', clade: 'Mammalia', sequence_data: 'VLSPADKTNVKAAWGKVGAHAGEYGAEALERMFLSFPTTKTYFPHFDLSHG' },
+    { scientific_name: 'Gorilla gorilla', common_name: 'Gorila', clade: 'Mammalia', sequence_data: 'VLSPADKTNVKAAWGKVGAHAGDYGAEALERMFLSFPTTKTYFPHFDLSHG' },
+    { scientific_name: 'Pongo abelii', common_name: 'Orangután', clade: 'Mammalia', sequence_data: 'LLSPADKTNVKAAWGKVGAHAGEYGAEALERMFLSFPTTKTYFPHFDLSHG' },
+    { scientific_name: 'Macaca mulatta', common_name: 'Macaco', clade: 'Mammalia', sequence_data: 'VLSPADKTNIKAAWGKVGGHAGEYGAEALERMFLSFPTTKTYFPHFDLSHG' },
+
+    // --- Otros Mamíferos (Id: 80% - 90%) ---
+    { scientific_name: 'Mus musculus', common_name: 'Ratón', clade: 'Mammalia', sequence_data: 'VLSGEDKSNIKAAWGKIGGHGAEYGAEALERMFASFPTTKTYFPHFDVSHG' },
+    { scientific_name: 'Rattus norvegicus', common_name: 'Rata', clade: 'Mammalia', sequence_data: 'VLSADDKTNIKAAWGKIGGHGAEYGAEALERMFASFPTTKTYFPHFDVSHG' },
+    { scientific_name: 'Canis lupus familiaris', common_name: 'Perro', clade: 'Mammalia', sequence_data: 'VLSPADKTNIKSTWDKIGGHAGDYGAEALERMFASFPTTKTYFPHFDLSHG' },
+    { scientific_name: 'Felis catus', common_name: 'Gato', clade: 'Mammalia', sequence_data: 'VLSAADKSNVKAAWGKVGGHAAEYGAEALERMFLSFPTTKTYFPHFDLSHG' },
+    { scientific_name: 'Equus caballus', common_name: 'Caballo', clade: 'Mammalia', sequence_data: 'VLSAADKTNVKAAWSKVGGHAGEYGAEALERMFLGFPTTKTYFPHFDLSHG' },
+    { scientific_name: 'Bos taurus', common_name: 'Vaca', clade: 'Mammalia', sequence_data: 'VLSAADKGNVKAAWGKVGGHAAEYGAEALERMFLSFPTTKTYFPHFDLSHG' },
+    { scientific_name: 'Sus scrofa', common_name: 'Cerdo', clade: 'Mammalia', sequence_data: 'VLSAADKANVKAAWGKVGGQAGAHGAEALERMFLSFPTTKTYFPHFNLSHG' },
+    { scientific_name: 'Oryctolagus cuniculus', common_name: 'Conejo', clade: 'Mammalia', sequence_data: 'VLSPADKTNIKTAWEKIGSHGGEYGAEALERMFLSFPTTKTYFPHFDFSHG' },
+
+    // --- Aves y Reptiles (Id: 70% - 80%) ---
+    { scientific_name: 'Gallus gallus', common_name: 'Pollo', clade: 'Aves', sequence_data: 'VLSAADKNNVKGIFTKIAGHAEEYGAETLERMFTTYPPTKTYFPHFDLSHG' },
+    { scientific_name: 'Taeniopygia guttata', common_name: 'Diamante Mandarín', clade: 'Aves', sequence_data: 'VLSAADKNNVKGIFSKIAGHAEEYGAETLERMFTTYPPTKTYFPHFDLSHG' },
+    { scientific_name: 'Alligator mississippiensis', common_name: 'Caimán', clade: 'Reptilia', sequence_data: 'VLSAADKNNVKAVWSKVAGHLEEYGSETLERMFTTFPPTKTYFPHFDLSHG' },
+    { scientific_name: 'Chrysemys picta', common_name: 'Tortuga', clade: 'Reptilia', sequence_data: 'VLSAADKTNVKGVFSKIAGHAEEYGAETLERMFTTYPPTKTYFPHFDLSHG' },
+
+    // --- Anfibios y Peces (Id: 50% - 70%) ---
+    { scientific_name: 'Xenopus laevis', common_name: 'Rana Africana', clade: 'Amphibia', sequence_data: 'VLSADDKNHVKAWGKVGAHAGEYGAEALERMFLSFPTTKTYFPHFDLSHG' },
+    { scientific_name: 'Danio rerio', common_name: 'Pez Cebra', clade: 'Actinopterygii', sequence_data: 'SLSDKDKAAVVKWAKDIQAQQGYDVEALELMFKTFPTTKTYFPHFDLSHG' },
+    { scientific_name: 'Salmo salar', common_name: 'Salmón', clade: 'Actinopterygii', sequence_data: 'SLSDKDKAAVVKWAKDIQAQQGYDVEALELMFKTFPSTKTYFPHFDLSHG' },
+    { scientific_name: 'Callorhinchus milii', common_name: 'Tiburón Elefante', clade: 'Chondrichthyes', sequence_data: 'SLTAKDKSVKAVWGKIGGHADEFGAEALERMFAAFPTTKTYFPHFDFSHG' },
+
+    // --- Invertebrados (Globinas análogas, Id: < 50%) ---
+    { scientific_name: 'Drosophila melanogaster', common_name: 'Mosca de la Fruta', clade: 'Insecta', sequence_data: 'TLTEEDKAHVSKWAANILGIQGYDVETLELMFSKFPNTKTYFPHFDLSHG' },
+    { scientific_name: 'Caenorhabditis elegans', common_name: 'Gusano C. elegans', clade: 'Nematoda', sequence_data: 'PLTEEDKAHVSKWAANILGIQGYDVETLELMFSKFPNTKTFFPHFDLAH' },
+    { scientific_name: 'Lumbricus terrestris', common_name: 'Lombriz de Tierra', clade: 'Annelida', sequence_data: 'GLSAAQRQVIAATWKDIAGNDNGAGVGKDCLIKFLSAHPQMAAVFGFSG' },
+    { scientific_name: 'Aplysia californica', common_name: 'Liebre de Mar', clade: 'Mollusca', sequence_data: 'SLSAAQKQNVKAAWGKVGGHAAEYGAEALERMFLSFPTTKTYFPHFDLS' }
 ];
 
-// Ejecutar el sembrado de datos
 const seedDatabase = db.transaction((data) => {
     for (const item of data) {
-        insertOrganism.run({
-            scientific_name: item.scientific_name,
-            common_name: item.common_name,
-            clade: item.clade,
-            ncbi_tax_id: item.ncbi_tax_id
-        });
-        
-        insertSequence.run({
-            scientific_name: item.scientific_name,
-            accession_number: item.accession_number,
-            protein_name: item.protein_name,
-            sequence_data: item.sequence_data
-        });
+        insertOrganism.run(item);
+        insertSequence.run(item);
     }
 });
 
 seedDatabase(seedData);
-
-console.log("Base de datos y tablas creadas. Datos de prueba insertados correctamente.");
+console.log("Base de datos inicializada con usuarios y organismos.");

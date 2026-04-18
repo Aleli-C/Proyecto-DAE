@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inicio - Bio-App DAE</title>
+    <link rel="stylesheet" href="/css/main.css"> <link rel="stylesheet" href="/css/home.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="brand">🧬 Bio-Analizador</div>
+            <ul class="nav-links">
+                <li><a href="/home" class="active">Inicio</a></li>
+                <li><a href="/listado">Listado ABC</a></li>
+                <li><a href="/comparar">Comparar</a></li>
+                <li><button id="logoutBtn" class="btn-logout">Cerrar Sesión</button></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="dashboard-container fade-in">
+        <header class="welcome-banner">
+            <h1>Hola, <span id="display-username">Usuario</span></h1>
+            <p>Panel de gestión bioinformática para el análisis de Hemoglobina Alfa.</p>
+        </header>
+
+        <section class="quick-actions">
+            <div class="action-card">
+                <div class="card-icon">📁</div>
+                <h3>Catálogo de Organismos</h3>
+                <p>Explora la base de datos de especies registradas ordenadas alfabéticamente.</p>
+                <a href="/listado" class="btn-action">Ver Listado</a>
+            </div>
+
+            <div class="action-card">
+                <div class="card-icon">🧪</div>
+                <h3>Comparador de Secuencias</h3>
+                <p>Realiza alineamientos entre dos organismos usando el algoritmo Needleman-Wunsch.</p>
+                <a href="/comparar" class="btn-action">Iniciar Análisis</a>
+            </div>
+        </section>
+
+        <section class="info-section">
+            <div class="info-box">
+                <h4>Sobre el Proyecto</h4>
+                <p>Esta aplicación procesa secuencias de la subunidad alfa de la hemoglobina humana. Utiliza una lógica PAM simplificada para distinguir cambios conservadores en proteínas.</p>
+            </div>
+        </section>
+    </main>
+
+    <script src="/js/home.js"></script>
+</body>
+</html>
